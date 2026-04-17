@@ -27,7 +27,7 @@
 
     <div class="lp-hero-actions">
         <a href="{{ url_for('register') }}" class="lp-btn">Create free account</a>
-        <a href="#features" class="lp-btn">See how it works</a>
+        <a href="#" id="open-demo-modal" class="lp-btn">See how it works</a>
     </div>
 
     <div class="lp-mockup">
@@ -107,4 +107,55 @@
     </div>
 </section>
 
+<!-- Video modal -->
+<div id="demo-modal" class="lp-modal-overlay" aria-hidden="true">
+    <div class="lp-modal-box" role="dialog" aria-modal="true">
+        <button class="lp-modal-close" id="close-demo-modal" aria-label="Close">&times;</button>
+        <div class="lp-modal-video">
+            <iframe
+                id="demo-iframe"
+                src=""
+                title="Spendly demo"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    (function () {
+        var VIDEO_SRC = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
+        var overlay  = document.getElementById('demo-modal');
+        var iframe   = document.getElementById('demo-iframe');
+
+        function openModal(e) {
+            e.preventDefault();
+            iframe.src = VIDEO_SRC;
+            overlay.classList.add('lp-modal-open');
+            overlay.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeModal() {
+            overlay.classList.remove('lp-modal-open');
+            overlay.setAttribute('aria-hidden', 'true');
+            iframe.src = '';
+        }
+
+        document.getElementById('open-demo-modal').addEventListener('click', openModal);
+        document.getElementById('close-demo-modal').addEventListener('click', closeModal);
+
+        overlay.addEventListener('click', function (e) {
+            if (e.target === overlay) closeModal();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeModal();
+        });
+    })();
+</script>
 {% endblock %}
